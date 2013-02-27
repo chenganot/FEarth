@@ -1,0 +1,9 @@
+{
+	"id": "chenganot",
+	"version": "1.0.0",
+	"vendor": "chenganot",
+	"type": "DrClinet",
+	"main": "index.html",
+	"title": "FEarth",
+	"icon": "icon.png",
+}
