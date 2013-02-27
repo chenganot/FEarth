@@ -19,6 +19,10 @@
 		<script type="text/javascript">
 			var myApp = new App();
 			enyo.dispatcher.listen(document, "deviceready");
+			if(enyo.platform.webos) {
+  			window.PalmSystem.stageReady();
+			}
+			
 			myApp.renderInto(document.body);
 		</script>
 	</body>
