@@ -27,8 +27,8 @@ enyo.kind({
 	{kind: "Checkbox", checked: true, content: "Remember your account and password", onchange: "changed"},
 	
 	{tag: "br"},
-	{kind: "onyx.Button", content: "Sign in", ontap: "tapped"},
-	{kind: "onyx.Button", content: "Sing out", ontap: "outTapped"},
+	{kind: "onyx.Button", content: "Sign in", onclick: "tapped"},
+	{kind: "onyx.Button", content: "Sing out", onclick: "outTapped"},
 
 	{tag: "br"}
 	]},
@@ -44,16 +44,34 @@ deviceReady: function(){
 },
 
 tapped: function(inSender, inEvnet){
+	var ipAddr = "10.100.61.3";
 	var acc = this.$.account.getValue();
 	var pss = this.$.password.getValue();
+	var severURL = "http://"+ipAddr+"/";
+	var loginSend = "DDDDD="+acc+"&upass="+pss+"&0MKKey=%B5%C7%C2%BC+Login";
 	if (acc == 0 || pss ==0) 
-		this.$.messages.addContent("</br>please input your account and password</br>");
+		this.$.messages.addContent("</br>please input your account and password  </br>");
 	else
-		this.$.messages.addContent("</br></br>account: "+ acc +"</br> password: "+ pss +"</br>");
+		{
+			var myAjax = new enyo.Ajax({ url: severURL});
+			myAjax.go({
+				q: loginSend
+			});
+			myAjax.response(this, "handleResponse");
+			myAjax.error(this, "handleError");
+
+
+		}
 },
 
 outTapped: function(inSender, inEvnet){
-	this.$.messages.addContent("</br></br>you always sign out...</br>")
+	var ipAddr = "10.100.61.3";
+	var outServer = "http://"+ ipAddr +"/"+"F.htm";
+	var outAjax = new enyo.Ajax({
+		url: outServer
+	});
+	outAjax.go();
+	outAjax.error(this, "processErrors");
 },
 
 inputedA: function(inSender, inEvnet){
@@ -65,6 +83,18 @@ inputedP: function(inSender, inEnent){
 
 changed: function(inSender, inEvent){
 	//setChecked(!this.checked)
+},
+
+handleResponse: function(inSender, inResponse){
+	this.$.messages.addContent("</br>Login Successful!  </br>")	
+},
+
+handleErrors: function(inSender, inResponse){
+	this.$.messages.addContent("</br>Login failed, try again or close the app...  </br>")	      
+},
+
+processErrors: function(inSender, inResponse){		       
+	this.$.messages.addContent("</br>sign out!   </br>")
 }
 
 });
